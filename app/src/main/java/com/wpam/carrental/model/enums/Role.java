@@ -1,8 +1,8 @@
 package com.wpam.carrental.model.enums;
 
 public enum Role {
-    ADMIN("admin"),
-    USER("user");
+    admin("admin"),
+    user("user");
 
     private String code;
 
