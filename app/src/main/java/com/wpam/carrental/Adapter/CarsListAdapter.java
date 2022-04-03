@@ -1,8 +1,7 @@
-package com.wpam.carrental.Adapter;
+package com.wpam.carrental.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

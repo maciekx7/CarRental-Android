@@ -1,4 +1,4 @@
-package com.wpam.carrental.Activity;
+package com.wpam.carrental.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,30 +6,25 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
-import com.wpam.carrental.Adapter.CarDetailsAdapter;
-import com.wpam.carrental.Adapter.CarsListAdapter;
 import com.wpam.carrental.R;
 import com.wpam.carrental.model.Car;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -43,6 +38,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
     TextView make, model, fuel;
     ImageView imageView;
+    Button rentButton;
     private Car car;
 
     private int carId;
@@ -68,19 +64,25 @@ public class CarDetailsActivity extends AppCompatActivity {
         model = findViewById(R.id.car_model);
         fuel = findViewById(R.id.car_fuel);
         imageView = findViewById(R.id.car_img);
+        rentButton = findViewById(R.id.rent_button);
         carId = getIntent().getIntExtra(TAG_ID,0);
 
         Picasso.get().load("http://10.0.2.2:4000/images/car_" + carId + ".jpg").into(imageView);
 
 
-
-
         String endpoint = url + carId;
-        System.out.println("----------HERE!: URL:\n" + endpoint);
-        Request request = new Request.Builder()
-                .url(endpoint)
-                .build();
+        getData(endpoint);
 
+    }
+
+    private void getData(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        fetchData(request);
+    }
+
+    private void fetchData(Request request) {
         Call call = client.newCall(request);
 
         call.enqueue(new Callback() {
@@ -104,6 +106,7 @@ public class CarDetailsActivity extends AppCompatActivity {
                         make.setText(car.getCarModel().getMake().getName());
                         model.setText(car.getCarModel().getName());
                         fuel.setText(car.getCarModel().getFuel().getCode());
+                        setRentButtonVisibility(car.isAvailability());
                     }
                 });
             }
@@ -149,6 +152,14 @@ public class CarDetailsActivity extends AppCompatActivity {
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
+        }
+    }
+
+    private void setRentButtonVisibility(boolean carAvailability) {
+        if(carAvailability) {
+            rentButton.setVisibility(View.VISIBLE);
+        } else {
+            rentButton.setVisibility(View.GONE);
         }
     }
 }

@@ -13,12 +13,18 @@
         <ImageView
             android:id="@+id/car_img"
             android:layout_width="match_parent"
-            android:layout_height="389dp"
+            android:layout_height="337dp"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <Button
+            android:id="@+id/rent_button"
+            android:layout_width="131dp"
+            android:layout_height="wrap_content"
+            android:text="Rent" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="51dp" />
+            android:layout_height="16dp" />
 
         <TextView
             android:id="@+id/car_make"
@@ -37,5 +43,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
