@@ -1,4 +1,4 @@
-package com.wpam.carrental.activity;
+package com.wpam.carrental.ui.catalog.details;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -5,45 +5,32 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
 import com.wpam.carrental.R;
 import com.wpam.carrental.model.Car;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CarsListAdapter extends BaseAdapter {
-    private Activity activity;
+public class CatalogAdapter extends ArrayAdapter<Car> {
     private LayoutInflater inflater;
-    private List<Car> carItems;
 
-    public CarsListAdapter(Activity activity, List<Car> carItems) {
-        this.activity = activity;
-        this.carItems = carItems;
+    public CatalogAdapter(Context context, List<Car> cars) {
+        super(context, 0, cars);
     }
 
-    @Override
-    public int getCount() {
-        return carItems.size();
-    }
-
-    @Override
-    public Object getItem(int location) {
-        return carItems.get(location);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (inflater == null) {
-            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         if (convertView == null) {
@@ -56,7 +43,7 @@ public class CarsListAdapter extends BaseAdapter {
 
 
 
-        Car car = carItems.get(position);
+        Car car = getItem(position);
         model.setText(car.getCarModel().getName());
         make.setText(car.getCarModel().getMake().getName());
         Picasso.get().load("http://10.0.2.2:4000/images/car_" + car.getId() + ".jpg").into(imageView);
