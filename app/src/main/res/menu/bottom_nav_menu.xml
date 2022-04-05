@@ -5,6 +5,11 @@
         android:icon="@drawable/ic_car_foreground"
         android:title="@string/title_catalog" />
 
+    <item
+        android:id="@+id/navigation_transactions"
+        android:icon="@drawable/ic_transactions_foreground"
+        android:title="@string/title_transactions" />
+
 
     <item
         android:id="@+id/navigation_profile"

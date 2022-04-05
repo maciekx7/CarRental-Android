@@ -3,4 +3,5 @@
     <string name="title_catalog">Catalog</string>
     <string name="title_profile">Profile</string>
     <string name="filter_catalog">Filter</string>
+    <string name="title_transactions">Transactions</string>
 </resources>

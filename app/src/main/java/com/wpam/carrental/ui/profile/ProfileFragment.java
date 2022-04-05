@@ -10,18 +10,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
-import com.wpam.carrental.databinding.FragmentCatalogBinding;
 import com.wpam.carrental.databinding.FragmentProfileBinding;
 import com.wpam.carrental.globalData.CurrentUser;
-import com.wpam.carrental.model.Car;
-import com.wpam.carrental.model.Make;
-import com.wpam.carrental.model.Model;
-import com.wpam.carrental.model.enums.Body;
-import com.wpam.carrental.model.enums.Fuel;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
