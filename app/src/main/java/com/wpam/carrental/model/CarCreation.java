@@ -40,7 +40,7 @@ public class CarCreation {
         return VIN;
     }
 
-    public boolean isAvailability() {
+    public boolean isAvailable() {
         return availability;
     }
 

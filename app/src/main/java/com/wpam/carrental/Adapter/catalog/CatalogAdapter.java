@@ -1,22 +1,17 @@
-package com.wpam.carrental.adapter;
+package com.wpam.carrental.Adapter.catalog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
 import com.wpam.carrental.R;
 import com.wpam.carrental.model.Car;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogAdapter extends ArrayAdapter<Car> {
@@ -37,7 +32,7 @@ public class CatalogAdapter extends ArrayAdapter<Car> {
             convertView = inflater.inflate(R.layout.cars_list_row, null);
         }
 
-        TextView model = convertView.findViewById(R.id.car_model);
+        TextView model = convertView.findViewById(R.id.car);
         TextView make = convertView.findViewById(R.id.car_make);
         ImageView imageView = convertView.findViewById(R.id.car_img);
 

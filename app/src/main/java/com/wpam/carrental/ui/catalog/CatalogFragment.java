@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,15 +16,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.wpam.carrental.ui.catalog.details.CarDetailsActivity;
-import com.wpam.carrental.adapter.CatalogAdapter;
+import com.wpam.carrental.Adapter.catalog.CatalogAdapter;
 import com.wpam.carrental.databinding.FragmentCatalogBinding;
-import com.wpam.carrental.globalData.CurrentUser;
 import com.wpam.carrental.model.Car;
-import com.wpam.carrental.model.Make;
-import com.wpam.carrental.model.Model;
-import com.wpam.carrental.model.enums.Body;
-import com.wpam.carrental.model.enums.Fuel;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -33,10 +27,8 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -44,6 +36,7 @@ public class CatalogFragment extends Fragment {
     private FragmentCatalogBinding binding;
     String url = "http://10.0.2.2:4000/api/catalog/cars";
     OkHttpClient client = new OkHttpClient();
+    Button filterButton, carButton, modelButton, makeButton;
 
     public static final String TAG_ID = "id";
     public static final String TAG_PAGE_TITLE = "detail_view_title";
@@ -62,7 +55,10 @@ public class CatalogFragment extends Fragment {
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.filterButton;
+        filterButton = binding.filterButton;
+        carButton = binding.addCarButton;
+        modelButton = binding.addModelButton;
+        makeButton = binding.addMakeButton;
         final ListView list = binding.list;
         adapter = new CatalogAdapter(getContext(), carsList);
         list.setAdapter(adapter);
@@ -80,8 +76,42 @@ public class CatalogFragment extends Fragment {
         });
 
         getData(url);
+        setButtonAction();
 
         return root;
+    }
+
+    private void setButtonAction() {
+        makeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddMakeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        modelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddModelActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        carButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddCarActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData(url);
     }
 
     private void getData(String url) {
@@ -116,7 +146,9 @@ public class CatalogFragment extends Fragment {
                     public void run() {
                         for(Car car : cars) {
                             System.out.println(car.toString());
-                            carsList.add(car);
+                            if(car.isAvailable()) {
+                                carsList.add(car);
+                            }
                         }
                         adapter.notifyDataSetChanged();
                     }

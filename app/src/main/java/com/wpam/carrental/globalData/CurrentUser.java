@@ -22,6 +22,7 @@ public class CurrentUser {
 
     private static CurrentUser INSTANCE;
     private User user;
+    private boolean loggedIn = false;
 
 
     private CurrentUser() { }
@@ -36,7 +37,7 @@ public class CurrentUser {
     }
 
     public boolean isUserLoggedIn() {
-        return !Objects.isNull(user);
+        return loggedIn;
     }
 
     public String getEmail() {
@@ -50,6 +51,8 @@ public class CurrentUser {
     public String getLastname() {
         return user.lastName;
     }
+
+    public String getPhone() {return user.phone; }
 
     public Role getRole() {
         return user.role;
@@ -70,6 +73,27 @@ public class CurrentUser {
             Type type = new TypeToken<User>() {}.getType();
             user = gson.fromJson(jsonUser, type);
         }
+        this.loggedIn = true;
+        return this;
+    }
+
+    public boolean isAdmin() {
+        if(this.isUserLoggedIn()) {
+            return user.role.equals(Role.admin);
+        }
+        return false;
+    }
+
+    public boolean isUser() {
+        if(this.isUserLoggedIn()) {
+            return user.role.equals(Role.user);
+        }
+        return false;
+    }
+
+    public CurrentUser clearUser() {
+        user = null;
+        loggedIn = false;
         return this;
     }
 

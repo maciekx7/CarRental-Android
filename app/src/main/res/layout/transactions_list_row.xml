@@ -30,13 +30,19 @@
             <TextView
                 android:id="@+id/car"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
+                android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/car_make"
+                android:id="@+id/return_date"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="TextView" />
 
         </LinearLayout>

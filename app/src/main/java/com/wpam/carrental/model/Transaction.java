@@ -11,6 +11,7 @@ public class Transaction {
     int carId;
     @SerializedName("UserId")
     int userId;
+    @SerializedName("User")
     User user;
     @SerializedName("Car")
     Car car;
@@ -91,7 +92,7 @@ public class Transaction {
         this.car = car;
     }
 
-    private class User {
+    public class User {
         String email;
 
         public User(String email) {

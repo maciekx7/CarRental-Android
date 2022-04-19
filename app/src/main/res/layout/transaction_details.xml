@@ -11,11 +11,11 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/rent_button"
+            android:id="@+id/return_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:rotationX="1"
-            android:text="Rent" />
+            android:text="Return" />
 
         <ImageView
             android:id="@+id/car_img"
@@ -28,16 +28,26 @@
             android:layout_height="16dp" />
 
         <TextView
-            android:id="@+id/car_make"
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
-            android:text="Username"
-            android:textSize="25sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/in_email" />
+            android:text="Date"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/rentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="monospace"
+            android:text="Date"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/car"
@@ -46,10 +56,23 @@
             android:layout_marginStart="11dp"
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
-            android:text="Username"
-            android:textSize="25sp"
+            android:text="carModel"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/car_make" />
+
+        <TextView
+            android:id="@+id/car_make"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="monospace"
+            android:text="carMake"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cost" />
+
         <TextView
             android:id="@+id/car_fuel"
             android:layout_width="wrap_content"
@@ -57,10 +80,24 @@
             android:layout_marginStart="11dp"
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
-            android:text="Username"
-            android:textSize="25sp"
+            android:text="carFuel"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/car" />
+
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="monospace"
+            android:text="Cost"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rentDate" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

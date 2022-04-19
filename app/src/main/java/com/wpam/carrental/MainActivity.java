@@ -1,6 +1,9 @@
 package com.wpam.carrental;
 
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -12,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.wpam.carrental.databinding.ActivityMainBinding;
+import com.wpam.carrental.globalData.CurrentUser;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("ACTIVITY_CHANGE----");
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -27,12 +32,20 @@ public class MainActivity extends AppCompatActivity  {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_catalog, R.id.navigation_transactions, R.id.navigation_profile)
                 .build();
+        if(!CurrentUser.getInstance().isUserLoggedIn()) {
+            navView.getMenu()
+                    .findItem(R.id.navigation_transactions)
+                    .setVisible(false);
+        }
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
 
     }
 }
