@@ -50,7 +50,6 @@ public class AddModelActivity extends AppCompatActivity {
     private Spinner makeSpinner, fuelSpinner, bodySpinner;
     private Button addModelButton;
     private MakeAdapter adapter;
-    private Make selectedMake;
     private TextView modelName, productionYear, enginePower;
 
     public static final MediaType JSON
@@ -100,7 +99,6 @@ public class AddModelActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
                 // Here you get the current item (a User object) that is selected by its position
-                selectedMake = adapter.getItem(position);
                 // Here you can do the action you want to...
             }
             @Override
@@ -195,9 +193,7 @@ public class AddModelActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        for(Make make : makesList) {
-                                makes.add(make);
-                        }
+                        makes.addAll(makesList);
                         adapter.notifyDataSetChanged();
                     }
                 });
