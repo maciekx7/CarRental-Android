@@ -47,7 +47,7 @@ import okhttp3.ResponseBody;
 public class AddCarActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
 
-    private static final String TAG_PAGE_TITLE = "Ad new car";
+    private static final String TAG_PAGE_TITLE = "Add new car";
 
     private Spinner makeSpinner, modelSpinner;
     private Button addCarButton;
@@ -75,7 +75,7 @@ public class AddCarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        setTitle(getIntent().getStringExtra(TAG_PAGE_TITLE));
+        setTitle(TAG_PAGE_TITLE);
         setContentView(R.layout.activity_add_new_car);
 
         modelSpinner = findViewById(R.id.spinnerModelSelector);

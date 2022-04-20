@@ -9,82 +9,88 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/label_edit_current_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Make" />
-
-        <Spinner
-            android:id="@+id/spinnerMake"
-            android:layout_width="match_parent"
-            android:layout_height="38dp" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Model name" />
+            android:text="currend password" />
 
         <EditText
-            android:id="@+id/inputModel"
+            android:id="@+id/input_edit_current_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/label_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="new password" />
+
+        <EditText
+            android:id="@+id/input_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/label_edit_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="confirm new password" />
+
+        <EditText
+            android:id="@+id/input_edit_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:ems="10"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/label_edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Name" />
 
-        <TextView
-            android:id="@+id/textView7"
+        <EditText
+            android:id="@+id/input_edit_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fuel" />
-
-        <Spinner
-            android:id="@+id/spinnerFuel"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="65dp"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/label_edit_lastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Body" />
-
-        <Spinner
-            android:id="@+id/spinnerBody"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="engine power" />
+            android:text="Lastname" />
 
         <EditText
-            android:id="@+id/inputEnginePower"
+            android:id="@+id/input_edit_lastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/label_edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="production Year" />
+            android:text="Phone" />
 
         <EditText
-            android:id="@+id/inputProductionYear"
+            android:id="@+id/input_edit_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="number" />
 
         <Button
-            android:id="@+id/buttonAddModel"
+            android:id="@+id/button_edit_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Confirm" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

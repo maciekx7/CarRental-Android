@@ -1,5 +1,6 @@
 package com.wpam.carrental.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.service.controls.Control;
 import android.view.LayoutInflater;
@@ -42,9 +43,6 @@ public class ProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("TEST---");
-        //        CatalogViewModel catalogViewModel =
-//                new ViewModelProvider(this).get(CatalogViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -57,10 +55,15 @@ public class ProfileFragment extends Fragment {
             clearLoginUser();
             fillLogoutUser();
         }
-
-
-
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(CurrentUser.getInstance().isUserLoggedIn()) {
+            fillLoginUser();
+        }
     }
 
 
@@ -163,10 +166,14 @@ public class ProfileFragment extends Fragment {
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO edit user button logic
+                Intent intent = new Intent(getActivity(),
+                        UserEditActivity.class);
+                startActivity(intent);
             }
         });
     }
+
+
 
 
 

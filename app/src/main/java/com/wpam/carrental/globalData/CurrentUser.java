@@ -36,6 +36,12 @@ public class CurrentUser {
         return INSTANCE;
     }
 
+    public void updateData(String name, String lastname, String phone) {
+        this.user.name = name;
+        this.user.lastName = lastname;
+        this.user.phone = phone;
+    }
+
     public boolean isUserLoggedIn() {
         return loggedIn;
     }

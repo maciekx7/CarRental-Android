@@ -11,8 +11,8 @@
         <TextView
             android:id="@+id/labelMake"
             android:layout_width="match_parent"
-            android:layout_height="62dp"
-            android:text="Put Make name" />
+            android:layout_height="34dp"
+            android:text="Make name" />
 
         <EditText
             android:id="@+id/inputMake"
