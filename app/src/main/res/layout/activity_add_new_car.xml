@@ -14,10 +14,30 @@
             android:layout_height="wrap_content"
             android:text="Make" />
 
-        <Spinner
-            android:id="@+id/spinnerMakeSelector"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp" />
+            android:layout_height="62dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerMakeSelector"
+                android:layout_width="269dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/car_make_add"
+                android:layout_width="66dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/car_make_delete"
+                android:layout_width="66dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:text="X" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView2"
@@ -25,10 +45,30 @@
             android:layout_height="wrap_content"
             android:text="Model" />
 
-        <Spinner
-            android:id="@+id/spinnerModelSelector"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="61dp" />
+            android:layout_height="58dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerModelSelector"
+                android:layout_width="267dp"
+                android:layout_height="61dp" />
+
+            <Button
+                android:id="@+id/car_model_add"
+                android:layout_width="66dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/car_model_delete"
+                android:layout_width="66dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:text="X" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView3"

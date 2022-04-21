@@ -25,8 +25,6 @@ import com.wpam.carrental.model.APIResultMessageBasic;
 import com.wpam.carrental.model.CarCreation;
 import com.wpam.carrental.model.Make;
 import com.wpam.carrental.model.Model;
-import com.wpam.carrental.model.enums.Body;
-import com.wpam.carrental.model.enums.Fuel;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -50,7 +48,7 @@ public class AddCarActivity extends AppCompatActivity {
     private static final String TAG_PAGE_TITLE = "Add new car";
 
     private Spinner makeSpinner, modelSpinner;
-    private Button addCarButton;
+    private Button addCarButton, deleteMake, deleteModel;
     private TextView costText, VINText;
 
     private MakeAdapter makeAdapter;
@@ -61,6 +59,7 @@ public class AddCarActivity extends AppCompatActivity {
     private List<Model> models = new ArrayList<>();
 
     private Make selectedMake;
+    private Model selectedModel;
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -82,6 +81,8 @@ public class AddCarActivity extends AppCompatActivity {
         makeSpinner = findViewById(R.id.spinnerMakeSelector);
 
         addCarButton = findViewById(R.id.buttonAddCar);
+        deleteMake = findViewById(R.id.car_make_delete);
+        deleteModel = findViewById(R.id.car_model_delete);
 
         costText = findViewById(R.id.inputCost);
         VINText = findViewById(R.id.inputVIN);
@@ -110,15 +111,42 @@ public class AddCarActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapter) {  }
         });
 
+        modelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                selectedModel = modelAdapter.getItem(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapter) {  }
+        });
+
+        deleteMake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete(urlMakes + selectedMake.getId());
+
+            }
+        });
+
+        deleteModel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                delete(urlModels + selectedModel.getId());
+
+            }
+        });
+
         carCreation();
 
     }
+
 
     private void getMakes() {
         Request request = new Request.Builder()
                 .url(urlMakes)
                 .build();
-        makes.clear();
         fetchMakes(request);
     }
 
@@ -144,8 +172,15 @@ public class AddCarActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        makes.clear();
                         makes.addAll(makesList);
                         makeAdapter.notifyDataSetChanged();
+                        if(!makes.isEmpty()) {
+                            selectedMake = makeAdapter.getItem(0);
+                            makeSpinner.setAdapter(makeAdapter);
+                            makeSpinner.setSelection(0);
+                            getModels();
+                        }
                     }
                 });
             }
@@ -183,12 +218,13 @@ public class AddCarActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        List newModelsList;
-                        newModelsList = modelsList.stream()
-                                .filter(o -> o.getMakeId() == selectedMake.getId())
-                                .collect(Collectors.toList());
-                        models.addAll(newModelsList);
-                        modelAdapter.notifyDataSetChanged();
+                            models.clear();
+                            List newModelsList;
+                            newModelsList = modelsList.stream()
+                                    .filter(o -> o.getMakeId() == selectedMake.getId())
+                                    .collect(Collectors.toList());
+                            models.addAll(newModelsList);
+                            modelAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -235,6 +271,55 @@ public class AddCarActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 ResponseBody responseBody = response.body();
                 assert responseBody != null;
+                int code = response.code();
+                JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
+                Type type = new TypeToken<APIResultMessageBasic>() {}.getType();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        APIResultMessageBasic resMsg = gson.fromJson(resultMessage, type);
+                        final Toast toast = Toast.makeText(getBaseContext(), resMsg.message, Toast.LENGTH_LONG);
+                        toast.show();
+                        if(code == 200 || code == 201) {
+                            getMakes();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+
+
+    ////////////DELETE---------------------
+    private void delete(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .addHeader("x-access-token",  CurrentUser.getInstance().getToken())
+                .build();
+        deleteRequest(request);
+    }
+
+    private void deleteRequest(Request request) {
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                System.out.println("FAIL");
+                System.out.println(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                ResponseBody responseBody = response.body();
+                assert responseBody != null;
+                final int statusCode = response.code();
+
                 JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
                 Type type = new TypeToken<APIResultMessageBasic>() {}.getType();
 

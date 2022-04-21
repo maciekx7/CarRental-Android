@@ -1,5 +1,6 @@
 package com.wpam.carrental.ui.catalog;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -23,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.wpam.carrental.R;
 import com.wpam.carrental.globalData.CurrentUser;
+import com.wpam.carrental.model.APIResultMessageBasic;
 import com.wpam.carrental.model.ApiPostModels.TransactionInitializationModel;
 import com.wpam.carrental.model.Car;
 
@@ -47,7 +49,7 @@ public class CarDetailsActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
     TextView make, model, fuel;
     ImageView imageView;
-    Button rentButton;
+    Button rentButton, deleteButton;
     private Car car;
 
     private int carId;
@@ -77,6 +79,7 @@ public class CarDetailsActivity extends AppCompatActivity {
         fuel = findViewById(R.id.car_fuel);
         imageView = findViewById(R.id.car_img);
         rentButton = findViewById(R.id.rent_button);
+        deleteButton = findViewById(R.id.delete_button);
         carId = getIntent().getIntExtra(TAG_ID,0);
 
         Picasso.get().load("http://10.0.2.2:4000/images/car_" + carId + ".jpg").into(imageView);
@@ -89,6 +92,13 @@ public class CarDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 rentCar(car, rentUrl);
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteCar(url + car.getId());
             }
         });
 
@@ -135,7 +145,6 @@ public class CarDetailsActivity extends AppCompatActivity {
 
 
     //-----POST rent car-----
-
     public void rentCar(Car car, String url) {
 
         TransactionInitializationModel model = new TransactionInitializationModel(
@@ -181,6 +190,52 @@ public class CarDetailsActivity extends AppCompatActivity {
     }
 
 
+    //----------- DELETE CAR ----------
+    private void deleteCar(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .addHeader("x-access-token",  CurrentUser.getInstance().getToken())
+                .build();
+        deleteRequest(request);
+    }
+
+    private void deleteRequest(Request request) {
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                System.out.println("FAIL");
+                System.out.println(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                ResponseBody responseBody = response.body();
+                assert responseBody != null;
+                final int statusCode = response.code();
+
+                JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
+                Type type = new TypeToken<APIResultMessageBasic>() {}.getType();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        APIResultMessageBasic resMsg = gson.fromJson(resultMessage, type);
+                        final Toast toast = Toast.makeText(getBaseContext(), resMsg.message, Toast.LENGTH_LONG);
+                        toast.show();
+                        if((statusCode == 200 || statusCode == 201)) {
+                            finish();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -200,8 +255,14 @@ public class CarDetailsActivity extends AppCompatActivity {
     private void setRentButtonVisibility(boolean carAvailability) {
         if(carAvailability && CurrentUser.getInstance().isUser()) {
             rentButton.setVisibility(View.VISIBLE);
-        } else {
+        } else  {
             rentButton.setVisibility(View.GONE);
+        }
+
+        if(CurrentUser.getInstance().isAdmin()) {
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            deleteButton.setVisibility(View.GONE);
         }
     }
 }

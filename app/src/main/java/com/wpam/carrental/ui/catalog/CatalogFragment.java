@@ -2,6 +2,7 @@ package com.wpam.carrental.ui.catalog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.voice.VisibleActivityInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.wpam.carrental.Adapter.catalog.CatalogAdapter;
 import com.wpam.carrental.databinding.FragmentCatalogBinding;
+import com.wpam.carrental.globalData.CurrentUser;
 import com.wpam.carrental.model.Car;
 
 import java.io.IOException;
@@ -77,8 +79,21 @@ public class CatalogFragment extends Fragment {
 
         getData(url);
         setButtonAction();
+        setButtonVisibility();
 
         return root;
+    }
+
+    private void setButtonVisibility() {
+        if(CurrentUser.getInstance().isAdmin()) {
+            modelButton.setVisibility(View.VISIBLE);
+            makeButton.setVisibility(View.VISIBLE);
+            carButton.setVisibility(View.VISIBLE);
+        } else {
+            modelButton.setVisibility(View.GONE);
+            makeButton.setVisibility(View.GONE);
+            carButton.setVisibility(View.GONE);
+        }
     }
 
     private void setButtonAction() {
@@ -156,46 +171,5 @@ public class CatalogFragment extends Fragment {
             }
         });
     }
-
-//    public void fetchUser(String email, String password) {
-//        RequestBody formBody = new FormBody.Builder()
-//                .add("email", email)
-//                .add("password", password)
-//                .build();
-//
-//        String url = "http://10.0.2.2:4000/api/auth/signin";
-//        Request request = new Request.Builder()
-//                .url(url)
-//                .post(formBody)
-//                .build();
-//
-//        Call call = client.newCall(request);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-//                System.out.println("USER!---\nFAILURE");
-//            }
-//
-//            @Override
-//            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-//                ResponseBody responseBody = response.body();
-//                assert responseBody != null;
-//                String jsonObject = responseBody.string();
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            CurrentUser user = CurrentUser.getInstance().setUser(jsonObject);
-//                            System.out.println("USER!---\n" + user.toString());
-//
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//    }
-
 
 }
