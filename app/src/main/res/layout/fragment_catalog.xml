@@ -23,18 +23,6 @@
                 android:text="+CAR" />
 
             <Button
-                android:id="@+id/add_model_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+MODEL" />
-
-            <Button
-                android:id="@+id/add_make_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+MAKE" />
-
-            <Button
                 android:id="@+id/filter_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

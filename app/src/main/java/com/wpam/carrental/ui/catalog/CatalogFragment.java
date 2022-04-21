@@ -38,7 +38,7 @@ public class CatalogFragment extends Fragment {
     private FragmentCatalogBinding binding;
     String url = "http://10.0.2.2:4000/api/catalog/cars";
     OkHttpClient client = new OkHttpClient();
-    Button filterButton, carButton, modelButton, makeButton;
+    Button filterButton, carButton;
 
     public static final String TAG_ID = "id";
     public static final String TAG_PAGE_TITLE = "detail_view_title";
@@ -59,8 +59,6 @@ public class CatalogFragment extends Fragment {
 
         filterButton = binding.filterButton;
         carButton = binding.addCarButton;
-        modelButton = binding.addModelButton;
-        makeButton = binding.addMakeButton;
         final ListView list = binding.list;
         adapter = new CatalogAdapter(getContext(), carsList);
         list.setAdapter(adapter);
@@ -86,32 +84,13 @@ public class CatalogFragment extends Fragment {
 
     private void setButtonVisibility() {
         if(CurrentUser.getInstance().isAdmin()) {
-            modelButton.setVisibility(View.VISIBLE);
-            makeButton.setVisibility(View.VISIBLE);
             carButton.setVisibility(View.VISIBLE);
         } else {
-            modelButton.setVisibility(View.GONE);
-            makeButton.setVisibility(View.GONE);
             carButton.setVisibility(View.GONE);
         }
     }
 
     private void setButtonAction() {
-        makeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddMakeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        modelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddModelActivity.class);
-                startActivity(intent);
-            }
-        });
 
         carButton.setOnClickListener(new View.OnClickListener() {
             @Override

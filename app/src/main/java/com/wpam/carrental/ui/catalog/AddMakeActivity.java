@@ -52,7 +52,7 @@ public class AddMakeActivity extends AppCompatActivity {
 
 
     private TextView makeInput;
-    private Button addMakeButton, deleteMake;
+    private Button addMakeButton;
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -70,7 +70,6 @@ public class AddMakeActivity extends AppCompatActivity {
 
         makeInput = findViewById(R.id.inputMake);
         addMakeButton = findViewById(R.id.buttonAddMake);
-        deleteMake = findViewById(R.id.del_make);
         if(!CurrentUser.getInstance().isAdmin()) {
             addMakeButton.setVisibility(View.GONE);
         }
@@ -86,12 +85,6 @@ public class AddMakeActivity extends AppCompatActivity {
 
         makeCreation();
 
-        deleteMake.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteMake(url + selectedMake.getId());
-            }
-        });
 
         makeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -205,49 +198,6 @@ public class AddMakeActivity extends AppCompatActivity {
 
 
 
-    private void deleteMake(String url) {
-        Request request = new Request.Builder()
-                .url(url)
-                .delete()
-                .addHeader("x-access-token",  CurrentUser.getInstance().getToken())
-                .build();
-        deleteRequest(request);
-    }
-
-    private void deleteRequest(Request request) {
-        Call call = client.newCall(request);
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                System.out.println("FAIL");
-                System.out.println(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Gson gson = new Gson();
-                ResponseBody responseBody = response.body();
-                assert responseBody != null;
-                final int statusCode = response.code();
-
-                JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
-                Type type = new TypeToken<APIResultMessageBasic>() {}.getType();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        APIResultMessageBasic resMsg = gson.fromJson(resultMessage, type);
-                        final Toast toast = Toast.makeText(getBaseContext(), resMsg.message, Toast.LENGTH_LONG);
-                        toast.show();
-                        if((statusCode == 200 || statusCode == 201)) {
-                            finish();
-                        }
-                    }
-                });
-            }
-        });
-    }
 
 
 

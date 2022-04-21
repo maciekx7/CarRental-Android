@@ -1,5 +1,6 @@
 package com.wpam.carrental.ui.catalog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +49,7 @@ public class AddCarActivity extends AppCompatActivity {
     private static final String TAG_PAGE_TITLE = "Add new car";
 
     private Spinner makeSpinner, modelSpinner;
-    private Button addCarButton, deleteMake, deleteModel;
+    private Button addCarButton, deleteMake, deleteModel, addMake, addModel;
     private TextView costText, VINText;
 
     private MakeAdapter makeAdapter;
@@ -83,6 +84,8 @@ public class AddCarActivity extends AppCompatActivity {
         addCarButton = findViewById(R.id.buttonAddCar);
         deleteMake = findViewById(R.id.car_make_delete);
         deleteModel = findViewById(R.id.car_model_delete);
+        addMake = findViewById(R.id.car_make_add);
+        addModel = findViewById(R.id.car_model_add);
 
         costText = findViewById(R.id.inputCost);
         VINText = findViewById(R.id.inputVIN);
@@ -138,8 +141,30 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
+        addMake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddMakeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        addModel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddModelActivity.class);
+                startActivity(intent);
+            }
+        });
+
         carCreation();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMakes();
     }
 
 
@@ -177,7 +202,6 @@ public class AddCarActivity extends AppCompatActivity {
                         makeAdapter.notifyDataSetChanged();
                         if(!makes.isEmpty()) {
                             selectedMake = makeAdapter.getItem(0);
-                            makeSpinner.setAdapter(makeAdapter);
                             makeSpinner.setSelection(0);
                             getModels();
                         }
@@ -192,7 +216,6 @@ public class AddCarActivity extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(urlModels)
                 .build();
-        models.clear();
         fetchModels(request);
     }
 
@@ -329,6 +352,9 @@ public class AddCarActivity extends AppCompatActivity {
                         APIResultMessageBasic resMsg = gson.fromJson(resultMessage, type);
                         final Toast toast = Toast.makeText(getBaseContext(), resMsg.message, Toast.LENGTH_LONG);
                         toast.show();
+                        if(statusCode >=200 && statusCode<300) {
+                            getMakes();
+                        }
                     }
                 });
             }
