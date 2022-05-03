@@ -28,7 +28,6 @@ public class TransactionsAdapter extends ArrayAdapter<Transaction> {
         super(context, 0, transactions);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (inflater == null) {

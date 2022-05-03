@@ -1,18 +1,32 @@
 package com.wpam.carrental.ui.catalog;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.loader.content.CursorLoader;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -22,12 +36,19 @@ import com.wpam.carrental.Adapter.catalog.MakeAdapter;
 import com.wpam.carrental.Adapter.catalog.ModelAdapter;
 import com.wpam.carrental.R;
 import com.wpam.carrental.globalData.CurrentUser;
+import com.wpam.carrental.model.APIResultCarCreation;
 import com.wpam.carrental.model.APIResultMessageBasic;
 import com.wpam.carrental.model.CarCreation;
 import com.wpam.carrental.model.Make;
 import com.wpam.carrental.model.Model;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +58,7 @@ import java.util.stream.Collectors;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -48,9 +70,16 @@ public class AddCarActivity extends AppCompatActivity {
 
     private static final String TAG_PAGE_TITLE = "Add new car";
 
+    private File imgFile;
+    private Uri uri;
+    private Bitmap bitmap;
+
     private Spinner makeSpinner, modelSpinner;
     private Button addCarButton, deleteMake, deleteModel, addMake, addModel;
     private TextView costText, VINText;
+
+    private ImageButton imageButton;
+
 
     private MakeAdapter makeAdapter;
     private ModelAdapter modelAdapter;
@@ -69,6 +98,7 @@ public class AddCarActivity extends AppCompatActivity {
     String urlMakes = "http://10.0.2.2:4000/api/catalog/makes/";
     String urlModels = "http://10.0.2.2:4000/api/catalog/models/";
     String urlTransaction = "http://10.0.2.2:4000/api/catalog/cars/";
+    String urlImage = "http://10.0.2.2:4000/upload/jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +119,8 @@ public class AddCarActivity extends AppCompatActivity {
 
         costText = findViewById(R.id.inputCost);
         VINText = findViewById(R.id.inputVIN);
+
+        imageButton = findViewById(R.id.image_btn);
 
         makeAdapter = new MakeAdapter(this,
                 android.R.layout.simple_spinner_item,
@@ -157,14 +189,49 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
 
-        carCreation();
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPictureDialog();
+            }
+        });
 
+        carCreation();
     }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+
+                        // There are no request codes
+                        uri = result.getData().getData();
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                            imageButton.setImageBitmap(bitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            });
 
     @Override
     public void onResume() {
         super.onResume();
         getMakes();
+    }
+
+    private void showPictureDialog() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher.launch(intent);
+//        startActivity(Intent.createChooser(intent, "Select Picture"));
+
     }
 
 
@@ -296,6 +363,66 @@ public class AddCarActivity extends AppCompatActivity {
                 assert responseBody != null;
                 int code = response.code();
                 JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
+                Type type = new TypeToken<APIResultCarCreation>() {}.getType();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        APIResultCarCreation resMsg = gson.fromJson(resultMessage, type);
+                        final Toast toast = Toast.makeText(getBaseContext(), resMsg.message, Toast.LENGTH_LONG);
+                        toast.show();
+                        if(code == 200 || code == 201) {
+                            try {
+                                addPhoto(resMsg.getCar().getId());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void addPhoto(int carId) throws IOException {
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        RequestBody req = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("filename", "car_" + String.valueOf(carId) + ".jpg")  // Upload parameters
+                .addFormDataPart(
+                        "file",
+                        "car_" + String.valueOf(carId) + ".jpg",
+                        RequestBody.create(encodedImage, MEDIA_TYPE_PNG)
+                ).build();
+
+        Request request = new Request.Builder()
+                .url(urlImage)
+                .post(req)
+                .build();
+        sendPhoto(request);
+    }
+
+    public void sendPhoto(Request request) {
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                System.out.println("FAIL");
+                System.out.println(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                ResponseBody responseBody = response.body();
+                assert responseBody != null;
+                int code = response.code();
+                JsonObject resultMessage = gson.fromJson(responseBody.string(), JsonObject.class);
                 Type type = new TypeToken<APIResultMessageBasic>() {}.getType();
 
                 runOnUiThread(new Runnable() {
@@ -312,7 +439,6 @@ public class AddCarActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 

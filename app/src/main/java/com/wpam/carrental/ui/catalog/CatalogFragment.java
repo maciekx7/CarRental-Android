@@ -75,7 +75,7 @@ public class CatalogFragment extends Fragment {
             }
         });
 
-        getData(url);
+//        getData(url);
         setButtonAction();
         setButtonVisibility();
 
