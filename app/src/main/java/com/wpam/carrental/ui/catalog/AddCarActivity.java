@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.MenuItem;
@@ -332,6 +333,7 @@ public class AddCarActivity extends AppCompatActivity {
                         true,
                         (((Model) modelSpinner.getSelectedItem()).getId())
                 );
+                System.out.println("CREATED CAR: " + model.toString());
 
                 RequestBody body = RequestBody.create(new Gson().toJson(model), JSON);
 
@@ -385,18 +387,37 @@ public class AddCarActivity extends AppCompatActivity {
     }
 
     public void addPhoto(int carId) throws IOException {
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
-        byte[] b = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, baos);
+//        byte[] b = baos.toByteArray();
+//        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        File file = null;
+        String filename = "car_" + String.valueOf(carId);
+        try {
+            file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + filename + ".jpg");
+            file.createNewFile();
+
+//Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0 , bos); // YOU can also save it in JPEG
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         RequestBody req = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("filename", "car_" + String.valueOf(carId) + ".jpg")  // Upload parameters
+                .addFormDataPart("filename", filename)  // Upload parameters
                 .addFormDataPart(
                         "file",
-                        "car_" + String.valueOf(carId) + ".jpg",
-                        RequestBody.create(encodedImage, MEDIA_TYPE_PNG)
+                        filename,
+                        RequestBody.create(file, MEDIA_TYPE_JPG)
                 ).build();
 
         Request request = new Request.Builder()
