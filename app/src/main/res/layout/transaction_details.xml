@@ -27,6 +27,42 @@
             android:layout_width="match_parent"
             android:layout_height="16dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/car_make"
+                android:layout_width="188dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:gravity="right"
+                android:text="Username"
+                android:textSize="21sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cost" />
+
+            <TextView
+                android:id="@+id/car"
+                android:layout_width="188dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:gravity="left"
+                android:text="Username"
+                android:textSize="21sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/car_make" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
@@ -35,7 +71,8 @@
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
             android:text="Date"
-            android:textSize="15sp"
+            android:gravity="center"
+            android:textSize="19sp"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -46,32 +83,8 @@
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
             android:text="Date"
-            android:textSize="15sp"
+            android:textSize="19sp"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/car"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="monospace"
-            android:text="carModel"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/car_make" />
-
-        <TextView
-            android:id="@+id/car_make"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="monospace"
-            android:text="carMake"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/cost" />
 
         <TextView
             android:id="@+id/car_fuel"
@@ -81,7 +94,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
             android:text="carFuel"
-            android:textSize="15sp"
+            android:textSize="19sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/car" />
 
@@ -94,7 +107,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="monospace"
             android:text="Cost"
-            android:textSize="15sp"
+            android:textSize="19sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/rentDate" />
 

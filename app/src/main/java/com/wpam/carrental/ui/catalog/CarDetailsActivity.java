@@ -3,6 +3,7 @@ package com.wpam.carrental.ui.catalog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +48,7 @@ import okhttp3.ResponseBody;
 
 public class CarDetailsActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
-    TextView make, model, fuel;
+    TextView make, model, fuel, body, year, engine, avaliability;
     ImageView imageView;
     Button rentButton, deleteButton;
     private Car car;
@@ -77,6 +78,10 @@ public class CarDetailsActivity extends AppCompatActivity {
         make = findViewById(R.id.car_make);
         model = findViewById(R.id.car);
         fuel = findViewById(R.id.car_fuel);
+        body = findViewById(R.id.car_body_details);
+        year = findViewById(R.id.car_production_details);
+        engine = findViewById(R.id.car_engine_details);
+        avaliability = findViewById(R.id.car_avaliability_details);
         imageView = findViewById(R.id.car_img);
         rentButton = findViewById(R.id.rent_button);
         deleteButton = findViewById(R.id.delete_button);
@@ -135,7 +140,17 @@ public class CarDetailsActivity extends AppCompatActivity {
                         car = gson.fromJson(jsonCar, type);
                         make.setText(car.getCarModel().getMake().getName());
                         model.setText(car.getCarModel().getName());
-                        fuel.setText(car.getCarModel().getFuel().getCode());
+                        fuel.setText("FUEL: " + car.getCarModel().getFuel().getCode());
+                        body.setText("BODY: " + car.getCarModel().getBody().toString());
+                        year.setText(String.valueOf(car.getCarModel().getProductionYear()) + "r.");
+                        engine.setText(String.valueOf(car.getCarModel().getEnginePower()) + "KM");
+                        if(car.isAvailable()) {
+                            avaliability.setTextColor(Color.GREEN);
+                            avaliability.setText("Available for:\n" + car.getCost() + "zł per day");
+                        } else {
+                            avaliability.setTextColor(Color.RED);
+                            avaliability.setText("Rented!");
+                        }
                         setRentButtonVisibility(car.isAvailable());
                     }
                 });

@@ -43,7 +43,7 @@
         <EditText
             android:id="@+id/input_edit_password_confirm"
             android:layout_width="match_parent"
-            android:layout_height="63dp"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword" />
 

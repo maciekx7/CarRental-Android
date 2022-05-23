@@ -50,7 +50,7 @@ public class CatalogAdapter extends ArrayAdapter<Car> {
         Picasso.get().load("http://10.0.2.2:4000/images/car_" + car.getId() + ".jpg").into(imageView);
         fuel.setText(car.getCarModel().getFuel().toString());
         body.setText(car.getCarModel().getBody().toString());
-        price.setText(Integer.toString(car.getCost()));
+        price.setText(Integer.toString(car.getCost()) + "zł");
 
         if(car.isAvailable()) {
             availability.setText("Available");

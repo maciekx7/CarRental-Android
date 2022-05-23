@@ -57,7 +57,6 @@ public class CatalogFragment extends Fragment {
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        filterButton = binding.filterButton;
         carButton = binding.addCarButton;
         final ListView list = binding.list;
         adapter = new CatalogAdapter(getContext(), carsList);
@@ -81,6 +80,8 @@ public class CatalogFragment extends Fragment {
 
         return root;
     }
+
+
 
     private void setButtonVisibility() {
         if(CurrentUser.getInstance().isAdmin()) {

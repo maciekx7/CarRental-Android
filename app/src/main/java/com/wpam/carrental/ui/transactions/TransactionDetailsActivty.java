@@ -125,17 +125,17 @@ public class TransactionDetailsActivty extends AppCompatActivity {
                         Picasso.get().load("http://10.0.2.2:4000/images/car_" + transaction.getCarId() + ".jpg").into(imageView);
                         make.setText(transaction.getCar().getCarModel().getMake().getName());
                         model.setText(transaction.getCar().getCarModel().getName());
-                        fuel.setText(transaction.getCar().getCarModel().getFuel().getCode());
+                        fuel.setText("FUEL: " + transaction.getCar().getCarModel().getFuel().getCode());
                         if(Objects.isNull(transaction.getReturnDate())) {
-                            date.setText(transaction.getRentDate() + " - ");
+                            date.setText("Rent period:\n" + transaction.getRentDate() + " - ");
                         } else {
-                            date.setText(transaction.getRentDate() + " - " + transaction.getReturnDate());
+                            date.setText("Rent period:\n" + transaction.getRentDate() + " - " + transaction.getReturnDate());
                             date.setTextColor(Color.GREEN);
                         }
-                        cost.setText(Integer.toString(transaction.getCost()));
+                        cost.setText("PRICE: "+ Integer.toString(transaction.getCost()) + " zł");
                         if(CurrentUser.getInstance().isAdmin()) {
                             email.setVisibility(View.VISIBLE);
-                            email.setText(transaction.getUser().getEmail());
+                            email.setText("user: " + transaction.getUser().getEmail());
                         } else {
                             email.setVisibility(View.GONE);
                         }
