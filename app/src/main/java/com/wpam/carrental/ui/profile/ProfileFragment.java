@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
     TextView email, emailText, password, passwordText, outTitle;
     TextView inName, inEmail, inTitle, inPhone;
     ConstraintLayout inLayout, outLayout;
-    Button loginBtn, editBtn, logoutBtn;
+    Button loginBtn, editBtn, logoutBtn, registerBtn;
 
     OkHttpClient client = new OkHttpClient();
 
@@ -191,6 +191,15 @@ public class ProfileFragment extends Fragment {
                 clearLoginForm();
             }
         });
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),
+                        RegisterUserActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void bindElements() {
@@ -212,6 +221,7 @@ public class ProfileFragment extends Fragment {
         loginBtn = binding.loginButton;
         logoutBtn = binding.logoutButton;
         editBtn = binding.editButton;
+        registerBtn = binding.registerButton;
     }
 
     public void disableInVisibility() {
@@ -248,6 +258,8 @@ public class ProfileFragment extends Fragment {
 
         passwordText.setVisibility(View.GONE);
         password.setVisibility(View.GONE);
+        loginBtn.setVisibility(View.GONE);
+        registerBtn.setVisibility(View.GONE);
 
         outTitle.setVisibility(View.GONE);
 
@@ -261,6 +273,8 @@ public class ProfileFragment extends Fragment {
 
         passwordText.setVisibility(View.VISIBLE);
         password.setVisibility(View.VISIBLE);
+        loginBtn.setVisibility(View.VISIBLE);
+        registerBtn.setVisibility(View.VISIBLE);
 
         outTitle.setVisibility(View.VISIBLE);
     }
